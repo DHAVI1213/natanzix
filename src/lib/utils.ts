@@ -13,9 +13,13 @@ export function scrollToId(id: string) {
   el.scrollIntoView({ behavior: reduzido ? "auto" : "smooth" });
 }
 
-export function linkIfoodItem(ifoodUrl: string | null | undefined, itemId: string | null | undefined) {
-  if (!ifoodUrl) return "#";
-  if (!itemId) return ifoodUrl;
+/**
+ * Monta o link direto do item no iFood. Retorna null quando falta a URL da loja
+ * ou o id do item — nesse caso o chamador NUNCA deve cair na página principal
+ * da loja, só desabilitar o botão/link de pedido.
+ */
+export function linkIfoodItem(ifoodUrl: string | null | undefined, itemId: string | null | undefined): string | null {
+  if (!ifoodUrl || !itemId) return null;
   return `${ifoodUrl}?prato=${itemId}`;
 }
 

@@ -11,7 +11,7 @@ interface AuthContextValue {
   isAdmin: boolean;
   backendConectado: boolean;
   entrar: (email: string, senha: string) => Promise<{ erro: string | null }>;
-  entrarComGoogle: () => Promise<{ erro: string | null }>;
+  entrarComGoogle: (depois?: string) => Promise<{ erro: string | null }>;
   cadastrar: (email: string, senha: string, nome: string) => Promise<{ erro: string | null }>;
   recuperarSenha: (email: string) => Promise<{ erro: string | null }>;
   sair: () => Promise<void>;
@@ -66,10 +66,11 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     return { erro: error ? traduzErro(error.message) : null };
   }
 
-  async function entrarComGoogle() {
+  async function entrarComGoogle(depois?: string) {
+    const destino = depois && depois.startsWith("/") ? depois : "/minha-conta";
     const { error } = await supabase.auth.signInWithOAuth({
       provider: "google",
-      options: { redirectTo: window.location.origin + "/minha-conta" },
+      options: { redirectTo: window.location.origin + destino },
     });
     return { erro: error ? traduzErro(error.message) : null };
   }

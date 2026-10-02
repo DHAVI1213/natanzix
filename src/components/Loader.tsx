@@ -22,6 +22,14 @@ export default function Loader({ onDone }: { onDone: () => void }) {
         return;
       }
 
+      // esconde o cabeçalho e o herói (já montados por baixo da cortina) para
+      // revelar tudo com uma entrada coreografada assim que a cortina sobe —
+      // igual ao modelo: cabeçalho desce, bolha salta, letras do título quicam.
+      gsap.set("#topo", { yPercent: -120 });
+      gsap.set(".heroi .bolha", { scale: 0.5, opacity: 0 });
+      gsap.set(".heroi h1 .l", { yPercent: 120, opacity: 0, rotate: () => gsap.utils.random(-30, 30) });
+      gsap.set(".heroi .etiqueta, .heroi .desc, .heroi .acoes", { y: 20, opacity: 0 });
+
       const tl = gsap.timeline({ onComplete: terminar });
       const num = { v: 0 };
       tl.from(".carga .logo-carga", { scale: 0, rotate: -90, duration: 0.7, ease: "back.out(2)" })
@@ -39,7 +47,15 @@ export default function Loader({ onDone }: { onDone: () => void }) {
           "<"
         )
         .to(".carga .miolo", { scale: 0.8, opacity: 0, duration: 0.35, ease: "back.in(2)" }, "+=.1")
-        .to(".carga .cortina", { yPercent: -100, duration: 0.7, ease: "power3.inOut", stagger: 0.08 }, "-=.1");
+        .to(".carga .cortina", { yPercent: -100, duration: 0.7, ease: "power3.inOut", stagger: 0.08 }, "-=.1")
+        .to("#topo", { yPercent: 0, duration: 0.8, ease: "power3.out" }, "-=.4")
+        .to(".heroi .bolha", { scale: 1, opacity: 1, duration: 0.9, ease: "back.out(1.7)" }, "<")
+        .to(
+          ".heroi h1 .l",
+          { yPercent: 0, opacity: 1, rotate: 0, duration: 0.7, ease: "back.out(2.2)", stagger: 0.03 },
+          "<.1"
+        )
+        .to(".heroi .etiqueta, .heroi .desc, .heroi .acoes", { y: 0, opacity: 1, duration: 0.5, ease: "power3.out", stagger: 0.07 }, "<.1");
 
       // se o GSAP demorar, não trava o site
       setTimeout(() => {

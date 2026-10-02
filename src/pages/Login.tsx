@@ -25,7 +25,7 @@ export default function Login() {
 
   async function onGoogle() {
     setErro(null);
-    const { erro } = await entrarComGoogle();
+    const { erro } = await entrarComGoogle(depois);
     if (erro) setErro(erro);
   }
 

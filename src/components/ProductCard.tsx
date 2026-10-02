@@ -14,6 +14,7 @@ interface Props {
 export default function ProductCard({ produto, ifoodUrl, favorito, onAlternarFavorito, index = 0 }: Props) {
   const { user } = useAuth();
   const navigate = useNavigate();
+  const link = linkIfoodItem(ifoodUrl, produto.ifood_item_id);
 
   function cliqueCoracao(e: React.MouseEvent) {
     e.preventDefault();
@@ -25,14 +26,21 @@ export default function ProductCard({ produto, ifoodUrl, favorito, onAlternarFav
     onAlternarFavorito(produto.id);
   }
 
+  function cliqueCard(e: React.MouseEvent) {
+    // sem id do item no iFood: nunca cair na página principal da loja.
+    if (!link) e.preventDefault();
+  }
+
   return (
     <a
       className="card"
       style={{ ["--i" as string]: index }}
-      href={linkIfoodItem(ifoodUrl, produto.ifood_item_id)}
-      target="_blank"
-      rel="noopener noreferrer"
-      aria-label={`${produto.nome}, ${produto.a_partir_de ? "a partir de " : ""}${brl(Number(produto.preco))}, pedir no iFood`}
+      href={link ?? undefined}
+      target={link ? "_blank" : undefined}
+      rel={link ? "noopener noreferrer" : undefined}
+      aria-disabled={link ? undefined : true}
+      onClick={cliqueCard}
+      aria-label={`${produto.nome}, ${produto.a_partir_de ? "a partir de " : ""}${brl(Number(produto.preco))}${link ? ", pedir no iFood" : ""}`}
     >
       <div className="foto">
         {produto.a_partir_de ? <span className="tag">monte o seu</span> : null}
@@ -56,7 +64,9 @@ export default function ProductCard({ produto, ifoodUrl, favorito, onAlternarFav
             {produto.a_partir_de ? <small>a partir de</small> : null}
             {brl(Number(produto.preco))}
           </span>
-          <span className="ir">Pedir ➜</span>
+          <span className="ir" style={link ? undefined : { opacity: 0.5, cursor: "default" }}>
+            {link ? "Pedir ➜" : "Em breve"}
+          </span>
         </div>
       </div>
     </a>

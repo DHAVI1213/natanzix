@@ -1,5 +1,5 @@
 import { useState, type FormEvent } from "react";
-import { Link } from "react-router-dom";
+import { Link, useSearchParams } from "react-router-dom";
 import logo from "@/assets/logo-frango-no-pote.png";
 import { useAuth } from "@/hooks/useAuth";
 
@@ -11,6 +11,8 @@ export default function Signup() {
   const [erro, setErro] = useState<string | null>(null);
   const [ok, setOk] = useState(false);
   const [enviando, setEnviando] = useState(false);
+  const [params] = useSearchParams();
+  const depois = params.get("depois") || undefined;
 
   async function onSubmit(e: FormEvent) {
     e.preventDefault();
@@ -24,7 +26,7 @@ export default function Signup() {
 
   async function onGoogle() {
     setErro(null);
-    const { erro } = await entrarComGoogle();
+    const { erro } = await entrarComGoogle(depois);
     if (erro) setErro(erro);
   }
 

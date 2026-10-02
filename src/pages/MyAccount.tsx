@@ -92,32 +92,41 @@ export default function MyAccount() {
           <p style={{ fontSize: 14 }}>Você ainda não favoritou nenhum produto. Toque no coração ♡ de um item no cardápio.</p>
         ) : (
           <div style={{ display: "grid", gap: 12 }}>
-            {favoritosProdutos.map((p) => (
-              <div
-                key={p.id}
-                style={{
-                  display: "flex",
-                  alignItems: "center",
-                  gap: 12,
-                  padding: 10,
-                  border: "3px solid var(--tinta)",
-                  borderRadius: 16,
-                  background: "#fff",
-                  boxShadow: "3px 3px 0 var(--tinta)",
-                }}
-              >
-                {p.imagem_url ? (
-                  <img src={p.imagem_url} alt={p.nome} width={56} height={56} style={{ objectFit: "contain", flexShrink: 0 }} loading="lazy" />
-                ) : null}
-                <div style={{ flex: 1, minWidth: 0 }}>
-                  <strong style={{ display: "block", fontSize: 15 }}>{p.nome}</strong>
-                  <span style={{ fontSize: 13, color: "#555" }}>{brl(Number(p.preco))}</span>
+            {favoritosProdutos.map((p) => {
+              const link = linkIfoodItem(ifoodUrl, p.ifood_item_id);
+              return (
+                <div
+                  key={p.id}
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    gap: 12,
+                    padding: 10,
+                    border: "3px solid var(--tinta)",
+                    borderRadius: 16,
+                    background: "#fff",
+                    boxShadow: "3px 3px 0 var(--tinta)",
+                  }}
+                >
+                  {p.imagem_url ? (
+                    <img src={p.imagem_url} alt={p.nome} width={56} height={56} style={{ objectFit: "contain", flexShrink: 0 }} loading="lazy" />
+                  ) : null}
+                  <div style={{ flex: 1, minWidth: 0 }}>
+                    <strong style={{ display: "block", fontSize: 15 }}>{p.nome}</strong>
+                    <span style={{ fontSize: 13, color: "#555" }}>{brl(Number(p.preco))}</span>
+                  </div>
+                  {link ? (
+                    <a className="btn peq" href={link} target="_blank" rel="noopener noreferrer">
+                      Pedir
+                    </a>
+                  ) : (
+                    <span className="btn peq" style={{ opacity: 0.5, pointerEvents: "none" }}>
+                      Em breve
+                    </span>
+                  )}
                 </div>
-                <a className="btn peq" href={linkIfoodItem(ifoodUrl, p.ifood_item_id)} target="_blank" rel="noopener noreferrer">
-                  Pedir
-                </a>
-              </div>
-            ))}
+              );
+            })}
           </div>
         )}
 
