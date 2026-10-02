@@ -1,0 +1,12 @@
+node_modules
+dist
+dist-ssr
+*.local
+.env
+.env.*
+!.env.example
+npm-debug.log*
+*.tsbuildinfo
+
+# arquivos de referência enviados pelo usuário (já incorporados ao projeto)
+uploads/
