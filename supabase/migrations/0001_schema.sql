@@ -74,7 +74,7 @@ create policy "admin apaga categorias"
 -- ---------- produtos ----------
 create table if not exists public.produtos (
   id uuid primary key default gen_random_uuid(),
-  categoria_id uuid not null references public.categorias(id) on delete cascade,
+  categoria_id uuid not null references public.categorias(id) on delete restrict,
   nome text not null,
   descricao text,
   preco numeric(10,2) not null default 0,
